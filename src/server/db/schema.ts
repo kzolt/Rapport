@@ -28,3 +28,15 @@ export const participant = createTable('participant', {
 
     created_at: timestamp('created_at').defaultNow(),
 })
+
+export const customer = createTable('customer', {
+    id: varchar('id', { length: 128 }).primaryKey(),
+    first_name: varchar('first_name', { length: 128 }).notNull(),
+    last_name: varchar('last_name', { length: 128 }).notNull(),
+
+    participant_id: varchar('participant_id', { length: 128 }).references(
+        () => participant.id
+    ),
+
+    created_at: timestamp('created_at').defaultNow(),
+})
