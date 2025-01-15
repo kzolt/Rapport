@@ -6,6 +6,7 @@ import { ClerkProvider } from '@clerk/nextjs'
 
 import { TRPCReactProvider } from '~/trpc/react'
 import { ThemeProvider } from '~/components/theme-provider'
+import { Toaster } from '~/components/ui/sonner'
 
 export const metadata: Metadata = {
     title: 'Rapport',
@@ -26,7 +27,10 @@ export default function RootLayout({
                         enableSystem
                         disableTransitionOnChange
                     >
-                        <TRPCReactProvider>{children}</TRPCReactProvider>
+                        <TRPCReactProvider>
+                            {children}
+                            <Toaster richColors position="bottom-right" />
+                        </TRPCReactProvider>
                     </ThemeProvider>
                 </ClerkProvider>
             </body>

@@ -1,6 +1,6 @@
 import { RedirectToSignIn, SignOutButton } from '@clerk/nextjs'
 import { currentUser } from '@clerk/nextjs/server'
-import { ChevronsUpDown, LogOut } from 'lucide-react'
+import { BarChart, ChevronsUpDown, Home, LogOut, MapPin, Users } from 'lucide-react'
 import { Suspense } from 'react'
 import { Avatar, AvatarFallback, AvatarImage } from '~/components/ui/avatar'
 import {
@@ -24,6 +24,8 @@ import {
     Sidebar,
     SidebarContent,
     SidebarFooter,
+    SidebarGroup,
+    SidebarGroupLabel,
     SidebarHeader,
     SidebarInset,
     SidebarMenu,
@@ -34,6 +36,7 @@ import {
 } from '~/components/ui/sidebar'
 import { LocationSwitcher } from './location-switcher'
 import { LocationProvider } from '~/components/location-context'
+import Link from 'next/link'
 
 export default function DashboardLayout(props: { children: React.ReactNode }) {
     return (
@@ -79,7 +82,50 @@ async function AppSidebar() {
             <SidebarHeader>
                 <LocationSwitcher />
             </SidebarHeader>
-            <SidebarContent></SidebarContent>
+            <SidebarContent>
+                <SidebarMenu>
+                    <SidebarGroup>
+                        <SidebarGroupLabel>General</SidebarGroupLabel>
+                        <SidebarMenuItem>
+                            <SidebarMenuButton asChild>
+                                <Link href={'/dashboard'}>
+                                    <Home className="size-4" />
+                                    <span>Home</span>
+                                </Link>
+                            </SidebarMenuButton>
+                        </SidebarMenuItem>
+                        <SidebarMenuItem>
+                            <SidebarMenuButton asChild>
+                                <Link href={'/dashboard/participants'}>
+                                    <Users className="size-4" />
+                                    <span>Participants</span>
+                                </Link>
+                            </SidebarMenuButton>
+                        </SidebarMenuItem>
+                        <SidebarMenuItem>
+                            <SidebarMenuButton asChild>
+                                <Link href={'/dashboard/reports'}>
+                                    <BarChart className="size-4" />
+                                    <span>Reports</span>
+                                </Link>
+                            </SidebarMenuButton>
+                        </SidebarMenuItem>
+                    </SidebarGroup>
+                    {user.privateMetadata.role === 'admin' && (
+                        <SidebarGroup>
+                            <SidebarGroupLabel>Admin</SidebarGroupLabel>
+                            <SidebarMenuItem>
+                                <SidebarMenuButton asChild>
+                                    <Link href={'/dashboard/locations'}>
+                                        <MapPin className="size-4" />
+                                        <span>Locations</span>
+                                    </Link>
+                                </SidebarMenuButton>
+                            </SidebarMenuItem>
+                        </SidebarGroup>
+                    )}
+                </SidebarMenu>
+            </SidebarContent>
             <SidebarFooter>
                 <SidebarMenu>
                     <DropdownMenu>

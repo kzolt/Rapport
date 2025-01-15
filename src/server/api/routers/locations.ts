@@ -1,14 +1,52 @@
-import { TRPCError } from '@trpc/server'
-import { createTRPCRouter, privateProcedure } from '../trpc'
+import { location } from '~/server/db/schema'
+import { adminProcedure, createTRPCRouter, privateProcedure } from '../trpc'
+import { z } from 'zod'
+
+import { createId } from '@paralleldrive/cuid2'
+import { clerkClient } from '@clerk/nextjs/server'
 
 export const locationsRouter = createTRPCRouter({
     get_locations: privateProcedure.query(async ({ ctx }) => {
-        const locations = (await ctx.user.privateMetadata.locations) as string[]
+        const metadata = ctx.user.privateMetadata as UserMetadata
 
-        if (!locations) {
-            throw new TRPCError({ code: 'NOT_FOUND', message: 'No locations found' })
+        if (!metadata.locations) {
+            return null
         }
 
-        return locations
+        return metadata.locations
     }),
+
+    set_location: adminProcedure
+        .input(
+            z.object({
+                name: z.string(),
+                company: z.string(),
+            })
+        )
+        .mutation(async ({ input, ctx }) => {
+            const clerk_client = await clerkClient()
+            const metadata = ctx.user.privateMetadata as UserMetadata
+
+            const location_id = createId()
+            await ctx.db.insert(location).values({
+                id: location_id,
+                name: input.name,
+                company: input.company,
+            })
+
+            const locations: LocationData[] = [
+                ...(metadata.locations ?? []),
+                {
+                    id: location_id,
+                    name: input.name,
+                    company: input.company,
+                },
+            ]
+
+            await clerk_client.users.updateUserMetadata(ctx.user.id, {
+                privateMetadata: {
+                    locations,
+                },
+            })
+        }),
 })

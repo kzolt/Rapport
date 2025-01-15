@@ -116,3 +116,13 @@ export const privateProcedure = t.procedure
 
         return next({ ctx: { user, ...ctx } })
     })
+
+export const adminProcedure = privateProcedure.use(async ({ next, ctx }) => {
+    const metadata = ctx.user.privateMetadata as UserMetadata
+
+    if (metadata.role !== 'admin') {
+        throw new TRPCError({ code: 'UNAUTHORIZED' })
+    }
+
+    return next({ ctx })
+})

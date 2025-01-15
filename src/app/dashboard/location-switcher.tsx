@@ -1,12 +1,17 @@
-import { Link } from '@radix-ui/react-navigation-menu'
-import { Command } from 'lucide-react'
-import { useLocation } from '~/components/location-context'
-import { SidebarMenuButton, SidebarMenuItem } from '~/components/ui/sidebar'
+'use client'
 
-import { SidebarMenu } from '~/components/ui/sidebar'
+import { MapPin } from 'lucide-react'
+import { useLocation } from '~/components/location-context'
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+} from '~/components/ui/dropdown-menu'
+import { SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '~/components/ui/sidebar'
 
 export function LocationSwitcher() {
-    const { currentLocation } = useLocation()
+    const { currentLocation, locations, setCurrentLocation } = useLocation()
 
     if (!currentLocation) {
         return null
@@ -15,19 +20,39 @@ export function LocationSwitcher() {
     return (
         <SidebarMenu>
             <SidebarMenuItem>
-                <SidebarMenuButton size={'lg'} asChild>
-                    <Link href={'/dashboard'}>
-                        <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
-                            <Command className="size-4" />
-                        </div>
-                        <div className="grid flex-1 text-left text-sm leading-right">
-                            <span className="truncate font-semibold">
-                                {currentLocation}
-                            </span>
-                            <span className="truncate text-xs">Code Ninjas</span>
-                        </div>
-                    </Link>
-                </SidebarMenuButton>
+                <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                        <SidebarMenuButton
+                            size={'lg'}
+                            className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+                        >
+                            <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
+                                <MapPin className="size-4" />
+                            </div>
+                            <div className="grid flex-1 text-left text-sm leading-right">
+                                <span className="truncate font-semibold">
+                                    {currentLocation.name}
+                                </span>
+                                <span className="truncate text-xs">
+                                    {currentLocation.company}
+                                </span>
+                            </div>
+                        </SidebarMenuButton>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent
+                        className="w-[--radix-dropdown-menu-trigger-width]"
+                        align="start"
+                    >
+                        {locations.map((location) => (
+                            <DropdownMenuItem
+                                key={location.id}
+                                onSelect={() => setCurrentLocation(location)}
+                            >
+                                {location.name}
+                            </DropdownMenuItem>
+                        ))}
+                    </DropdownMenuContent>
+                </DropdownMenu>
             </SidebarMenuItem>
         </SidebarMenu>
     )

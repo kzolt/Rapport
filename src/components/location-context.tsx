@@ -8,26 +8,28 @@ import {
     type Dispatch,
     type SetStateAction,
 } from 'react'
+
 import { api } from '~/trpc/react'
 
 type LocationContextType = {
-    currentLocation: string
-    setCurrentLocation: Dispatch<SetStateAction<string>>
+    currentLocation: LocationData | null
+    setCurrentLocation: Dispatch<SetStateAction<LocationData | null>>
 
-    locations: string[]
+    locations: LocationData[]
 }
 
 const LocationContext = createContext<LocationContextType | null>(null)
 
 export function LocationProvider(props: { children: React.ReactNode }) {
-    const [currentLocation, setCurrentLocation] = useState('')
-    const [locations, setLocations] = useState<string[]>([])
+    const [currentLocation, setCurrentLocation] = useState<LocationData | null>(null)
+    const [locations, setLocations] = useState<LocationData[]>([])
 
     const { data } = api.locations.get_locations.useQuery()
 
     useEffect(() => {
         if (data) {
             setLocations(data)
+            setCurrentLocation(data[0] ?? null)
         }
     }, [data])
 
