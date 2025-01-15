@@ -15,16 +15,17 @@ export const createTable = pgTableCreator((name) => `rapport_${name}`)
 /**
  * Tables
  */
-export const center = createTable('center', {
+export const location = createTable('location', {
     id: varchar('id', { length: 128 }).primaryKey(),
     name: varchar('name', { length: 128 }),
+    company: varchar('company', { length: 128 }),
 
     created_at: timestamp('created_at').defaultNow(),
 })
 
 export const participant = createTable('participant', {
     id: varchar('id', { length: 128 }).primaryKey(),
-    center_id: varchar('center_id', { length: 128 }),
+    location_id: varchar('location_id', { length: 128 }),
 
     first_name: varchar('first_name', { length: 128 }).notNull(),
     last_name: varchar('last_name', { length: 128 }).notNull(),
@@ -42,7 +43,7 @@ export const customer = createTable('customer', {
     phone: varchar('phone', { length: 128 }).notNull(),
 
     participant_id: varchar('participant_id', { length: 128 }),
-    center_id: varchar('center_id', { length: 128 }),
+    location_id: varchar('location_id', { length: 128 }),
 
     created_at: timestamp('created_at', { withTimezone: true }).defaultNow(),
 })
@@ -58,7 +59,7 @@ export const progress_report = createTable('progress_report', {
 export const session = createTable('session', {
     id: varchar('id', { length: 128 }).primaryKey(),
     participant_id: varchar('participant_id', { length: 128 }),
-    center_id: varchar('center_id', { length: 128 }),
+    location_id: varchar('location_id', { length: 128 }),
 
     time_in: timestamp('time_in', { withTimezone: true }).notNull(),
     time_out: timestamp('time_out', { withTimezone: true }),
@@ -71,17 +72,17 @@ export const session = createTable('session', {
  * Relations
  */
 export const customer_relations = relations(customer, ({ one, many }) => ({
-    center: one(center, {
-        fields: [customer.center_id],
-        references: [center.id],
+    location: one(location, {
+        fields: [customer.location_id],
+        references: [location.id],
     }),
     participant: many(participant),
 }))
 
 export const participant_relations = relations(participant, ({ one, many }) => ({
-    center: one(center, {
-        fields: [participant.center_id],
-        references: [center.id],
+    location: one(location, {
+        fields: [participant.location_id],
+        references: [location.id],
     }),
     customer: one(customer, {
         fields: [participant.id],

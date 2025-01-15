@@ -16,3 +16,8 @@ type ProgressReport = {
 }
 
 type SessionType = 'camp' | 'day-camp'
+
+type UserMetadata = {
+    center_id: string[]
+    role: 'admin' | 'staff'
+}
