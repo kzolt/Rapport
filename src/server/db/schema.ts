@@ -30,7 +30,7 @@ export const participant = createTable('participant', {
     first_name: varchar('first_name', { length: 128 }).notNull(),
     last_name: varchar('last_name', { length: 128 }).notNull(),
     rank: varchar('rank', { length: 128 }).$type<Rank>().notNull().default('white'),
-    image_key: varchar('image_key', { length: 128 }).notNull(),
+    image_key: varchar('image_key', { length: 128 }),
 
     created_at: timestamp('created_at', { withTimezone: true }).defaultNow(),
 })
@@ -51,6 +51,7 @@ export const customer = createTable('customer', {
 export const progress_report = createTable('progress_report', {
     id: varchar('id', { length: 128 }).primaryKey(),
     participant_id: varchar('participant_id', { length: 128 }),
+    location_id: varchar('location_id', { length: 128 }),
     content: jsonb('content').$type<ProgressReport[]>(),
 
     created_at: timestamp('created_at', { withTimezone: true }).defaultNow(),
@@ -97,6 +98,10 @@ export const progress_report_relations = relations(progress_report, ({ one }) =>
         fields: [progress_report.participant_id],
         references: [participant.id],
     }),
+    location: one(location, {
+        fields: [progress_report.location_id],
+        references: [location.id],
+    }),
 }))
 
 export const session_relations = relations(session, ({ one }) => ({
@@ -104,4 +109,10 @@ export const session_relations = relations(session, ({ one }) => ({
         fields: [session.participant_id],
         references: [participant.id],
     }),
+}))
+
+export const location_relations = relations(location, ({ many }) => ({
+    participants: many(participant),
+    progress_report: many(progress_report),
+    session: many(session),
 }))

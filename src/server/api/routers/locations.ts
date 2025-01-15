@@ -1,12 +1,12 @@
 import { location } from '~/server/db/schema'
-import { adminProcedure, createTRPCRouter, privateProcedure } from '../trpc'
+import { adminProcedure, createTRPCRouter, protectedProcedure } from '../trpc'
 import { z } from 'zod'
 
 import { createId } from '@paralleldrive/cuid2'
 import { clerkClient } from '@clerk/nextjs/server'
 
 export const locationsRouter = createTRPCRouter({
-    get_locations: privateProcedure.query(async ({ ctx }) => {
+    get_locations: protectedProcedure.query(async ({ ctx }) => {
         const metadata = ctx.user.privateMetadata as UserMetadata
 
         if (!metadata.locations) {

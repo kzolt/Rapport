@@ -105,7 +105,7 @@ const timingMiddleware = t.middleware(async ({ next, path }) => {
  */
 export const publicProcedure = t.procedure.use(timingMiddleware)
 
-export const privateProcedure = t.procedure
+export const protectedProcedure = t.procedure
     .use(timingMiddleware)
     .use(async ({ next, ctx }) => {
         const user = await currentUser()
@@ -117,7 +117,7 @@ export const privateProcedure = t.procedure
         return next({ ctx: { user, ...ctx } })
     })
 
-export const adminProcedure = privateProcedure.use(async ({ next, ctx }) => {
+export const adminProcedure = protectedProcedure.use(async ({ next, ctx }) => {
     const metadata = ctx.user.privateMetadata as UserMetadata
 
     if (metadata.role !== 'admin') {
