@@ -10,6 +10,7 @@ import {
 } from 'react'
 
 import { api } from '~/trpc/react'
+import type { LocationData } from '~/types/core'
 
 type LocationContextType = {
     currentLocation: LocationData | null

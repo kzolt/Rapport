@@ -4,6 +4,7 @@ import { z } from 'zod'
 
 import { createId } from '@paralleldrive/cuid2'
 import { clerkClient } from '@clerk/nextjs/server'
+import type { UserMetadata, LocationData } from '~/types/core'
 
 export const locationsRouter = createTRPCRouter({
     get_locations: protectedProcedure.query(async ({ ctx }) => {

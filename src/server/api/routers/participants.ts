@@ -3,6 +3,7 @@ import { adminProcedure, createTRPCRouter, protectedProcedure } from '../trpc'
 import { z } from 'zod'
 import { participant } from '~/server/db/schema'
 import { eq } from 'drizzle-orm'
+import type { Rank } from '~/types/core'
 
 export const participantsRouter = createTRPCRouter({
     set_participant: adminProcedure
@@ -32,7 +33,7 @@ export const participantsRouter = createTRPCRouter({
         )
         .query(async ({ input, ctx }) => {
             if (!input.location_id) {
-                return []
+                return null
             }
 
             return await ctx.db.query.participant.findMany({

@@ -3,6 +3,7 @@
 
 import { relations } from 'drizzle-orm'
 import { jsonb, pgTableCreator, timestamp, varchar } from 'drizzle-orm/pg-core'
+import type { Rank, ProgressReport, SessionType } from '~/types/core'
 
 /**
  * This is an example of how to use the multi-project schema feature of Drizzle ORM. Use the same

@@ -35,7 +35,6 @@ const schema = z.object({
 type SchemaType = z.infer<typeof schema>
 
 export function CreateForm() {
-    const { data: locations, isLoading } = api.locations.get_locations.useQuery()
     const { currentLocation } = useLocation()
 
     const form = useForm<SchemaType>({
@@ -44,7 +43,6 @@ export function CreateForm() {
             first_name: '',
             last_name: '',
             rank: '',
-            location_id: '',
         },
         mode: 'onSubmit',
     })
@@ -80,10 +78,6 @@ export function CreateForm() {
         })
     }
 
-    if (isLoading) {
-        return <div>Loading...</div>
-    }
-
     return (
         <Form {...form}>
             <form
@@ -111,37 +105,6 @@ export function CreateForm() {
                             <FormLabel>Last Name</FormLabel>
                             <FormControl>
                                 <Input {...field} placeholder="Last Name" />
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
-                <FormField
-                    control={form.control}
-                    name="location_id"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Location</FormLabel>
-                            <FormControl>
-                                <Select
-                                    {...field}
-                                    value={field.value}
-                                    onValueChange={field.onChange}
-                                >
-                                    <SelectTrigger>
-                                        <SelectValue placeholder="Select Location" />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        {locations?.map((location) => (
-                                            <SelectItem
-                                                key={location.id}
-                                                value={location.id}
-                                            >
-                                                {location.name}
-                                            </SelectItem>
-                                        ))}
-                                    </SelectContent>
-                                </Select>
                             </FormControl>
                             <FormMessage />
                         </FormItem>
