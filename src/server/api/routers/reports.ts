@@ -9,12 +9,34 @@ export const reportsRouter = createTRPCRouter({
     get_reports: protectedProcedure
         .input(
             z.object({
-                location_id: z.string(),
+                location_id: z.string().optional(),
             })
         )
         .query(async ({ input, ctx }) => {
+            if (!input.location_id) {
+                return null
+            }
+
             return await ctx.db.query.progress_report.findMany({
                 where: eq(progress_report.location_id, input.location_id),
+                with: {
+                    participant: true,
+                },
+            })
+        }),
+
+    get_report: protectedProcedure
+        .input(
+            z.object({
+                id: z.string(),
+            })
+        )
+        .query(async ({ ctx, input }) => {
+            return await ctx.db.query.progress_report.findFirst({
+                where: eq(progress_report.id, input.id),
+                with: {
+                    participant: true,
+                },
             })
         }),
 

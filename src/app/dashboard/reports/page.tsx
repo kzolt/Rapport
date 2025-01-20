@@ -5,6 +5,7 @@ import Link from 'next/link'
 
 import { Button } from '~/components/ui/button'
 import type { UserMetadata } from '~/types/core'
+import ReportsTable from './table'
 
 export default async function ReportsPage() {
     const current_user = await currentUser()
@@ -28,6 +29,8 @@ export default async function ReportsPage() {
                     </Button>
                 )}
             </div>
+
+            <ReportsTable />
         </div>
     )
 }
