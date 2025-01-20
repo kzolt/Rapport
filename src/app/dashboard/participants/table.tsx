@@ -11,9 +11,8 @@ export function ParticipantsTable() {
     const { data, isLoading } = api.participants.get_participants.useQuery({
         location_id: currentLocation?.id ?? null,
     })
-
     const columns: ColumnDef<
-        RouterOutputs['participants']['get_participants'][number]
+        NonNullable<RouterOutputs['participants']['get_participants']>[number]
     >[] = [
         {
             accessorKey: 'first_name',

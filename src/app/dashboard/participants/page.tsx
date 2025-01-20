@@ -5,6 +5,7 @@ import Link from 'next/link'
 
 import { Button } from '~/components/ui/button'
 import { ParticipantsTable } from './table'
+import type { UserMetadata } from '~/types/core'
 
 export default async function ParticipantsPage() {
     const current_user = await currentUser()

@@ -12,6 +12,7 @@ import superjson from 'superjson'
 import { ZodError } from 'zod'
 
 import { db } from '~/server/db'
+import type { UserMetadata } from '~/types/core'
 
 /**
  * 1. CONTEXT
