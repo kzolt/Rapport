@@ -1,12 +1,12 @@
 import { createId } from '@paralleldrive/cuid2'
-import { adminProcedure, createTRPCRouter, protectedProcedure } from '../trpc'
+import { createTRPCRouter, protectedProcedure } from '../trpc'
 import { z } from 'zod'
 import { participant } from '~/server/db/schema'
 import { eq } from 'drizzle-orm'
 import type { Rank } from '~/types/core'
 
 export const participantsRouter = createTRPCRouter({
-    set_participant: adminProcedure
+    set_participant: protectedProcedure
         .input(
             z.object({
                 first_name: z.string(),

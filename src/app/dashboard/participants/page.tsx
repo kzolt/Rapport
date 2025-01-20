@@ -5,7 +5,6 @@ import Link from 'next/link'
 
 import { Button } from '~/components/ui/button'
 import { ParticipantsTable } from './table'
-import type { UserMetadata } from '~/types/core'
 
 export default async function ParticipantsPage() {
     const current_user = await currentUser()
@@ -14,20 +13,16 @@ export default async function ParticipantsPage() {
         return <RedirectToSignIn />
     }
 
-    const metadata = current_user?.privateMetadata as UserMetadata
-
     return (
         <div className="container mx-auto flex w-full flex-col gap-4">
             <div className="flex w-full justify-between">
                 <h1 className="text-2xl font-bold">Participants</h1>
-                {metadata.role === 'admin' && (
-                    <Button asChild>
-                        <Link href="/dashboard/participants/create">
-                            <PlusIcon className="mr-2 h-4 w-4" />
-                            Create
-                        </Link>
-                    </Button>
-                )}
+                <Button asChild>
+                    <Link href="/dashboard/participants/create">
+                        <PlusIcon className="mr-2 h-4 w-4" />
+                        Create
+                    </Link>
+                </Button>
             </div>
 
             <ParticipantsTable />
