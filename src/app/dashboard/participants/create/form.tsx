@@ -24,9 +24,9 @@ import { Button } from '~/components/ui/button'
 import Link from 'next/link'
 import { useLocation } from '~/components/location-context'
 import { toast } from 'sonner'
+import { useRouter } from 'next/navigation'
 
 const schema = z.object({
-    location_id: z.string().min(1),
     first_name: z.string().min(1),
     last_name: z.string().min(1),
     rank: z.string().min(1),
@@ -36,6 +36,7 @@ type SchemaType = z.infer<typeof schema>
 
 export function CreateForm() {
     const { currentLocation } = useLocation()
+    const router = useRouter()
 
     const form = useForm<SchemaType>({
         resolver: zodResolver(schema),
@@ -62,6 +63,8 @@ export function CreateForm() {
             toast.success('Participant created', {
                 id: context?.toast_id,
             })
+
+            router.push('/dashboard/participants')
         },
     })
 
@@ -139,7 +142,9 @@ export function CreateForm() {
                     <Button variant="outline" asChild>
                         <Link href="/dashboard/participants">Cancel</Link>
                     </Button>
-                    <Button type="submit">Create</Button>
+                    <Button type="submit" disabled={setParticipant.isPending}>
+                        {setParticipant.isPending ? 'Creating...' : 'Create'}
+                    </Button>
                 </div>
             </form>
         </Form>
