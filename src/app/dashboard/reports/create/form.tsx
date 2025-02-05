@@ -23,7 +23,7 @@ import {
 import { Textarea } from '~/components/ui/textarea'
 
 import { api } from '~/trpc/react'
-import { JrActivity } from '~/types/core'
+import { JrActivity, juniorActivities } from '~/types/core'
 
 const schema = z.object({
     participant_id: z.string(),
@@ -115,7 +115,7 @@ export function CreateForm() {
                         <FormItem className="flex flex-col gap-2 justify-start">
                             <FormLabel>Activities: </FormLabel>
                             <div className="flex flex-col gap-4 justify-start items-start">
-                                {Object.values(JrActivity).map((item) => (
+                                {juniorActivities.map((item) => (
                                     <div
                                         key={item}
                                         className="flex items-center gap-2 justify-start"

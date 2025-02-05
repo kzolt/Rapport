@@ -25,6 +25,7 @@ export function LocationProvider(props: { children: React.ReactNode }) {
     const [currentLocation, setCurrentLocation] = useState<LocationData | null>(null)
     const [locations, setLocations] = useState<LocationData[]>([])
 
+    // TODO: Make it so it revalidates only on refresh
     const { data } = api.locations.get_locations.useQuery()
 
     useEffect(() => {

@@ -14,7 +14,7 @@ export default async function ReportsPage() {
     }
 
     return (
-        <div className="flex flex-col gap-5">
+        <div className="flex flex-col flex-1 gap-5">
             <div className="flex justify-between">
                 <h1 className="text-2xl font-bold">Reports</h1>
                 <Button asChild>

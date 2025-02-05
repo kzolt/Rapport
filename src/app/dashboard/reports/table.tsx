@@ -1,12 +1,11 @@
 'use client'
 
-import type { ColumnDef } from '@tanstack/react-table'
 import Link from 'next/link'
 import { useEffect } from 'react'
 import { DataTable } from '~/components/data-table'
 import { useLocation } from '~/components/location-context'
 import { Button } from '~/components/ui/button'
-import { api } from '~/trpc/react'
+import { api, RouterOutputs } from '~/trpc/react'
 
 export default function ReportsTable() {
     const { currentLocation } = useLocation()
@@ -25,32 +24,52 @@ export default function ReportsTable() {
 
     if (!data) return <div>No reports found</div>
 
-    const columns: ColumnDef<(typeof data)[number]>[] = [
-        {
-            header: 'Name',
-            cell: ({ row }) => {
-                const participant = row.original.participant
-                return `${participant?.first_name} ${participant?.last_name}`
-            },
-        },
-        {
-            header: 'Date',
-            cell: ({ row }) => {
-                const date = row.original.created_at
-                return date?.toLocaleDateString()
-            },
-        },
-        {
-            id: 'actions',
-            cell: ({ row }) => {
-                return (
-                    <Button asChild>
-                        <Link href={`/dashboard/reports/${row.original.id}`}>View</Link>
-                    </Button>
-                )
-            },
-        },
-    ]
+    return (
+        <DataTable
+            columnDefs={[
+                {
+                    field: 'first_name',
+                    headerName: 'Name',
+                    cellRenderer: ({
+                        data,
+                    }: {
+                        data: NonNullable<RouterOutputs['reports']['get_report']>
+                    }) => {
+                        const participant = data.participant
+                        return `${participant?.first_name} ${participant?.last_name}`
+                    },
+                },
+                {
+                    field: 'created_at',
+                    headerName: 'Date',
+                    valueFormatter: ({
+                        data,
+                    }: {
+                        data: NonNullable<RouterOutputs['reports']['get_report']>
+                    }) => {
+                        if (!data.created_at) {
+                            return 'Invalid Date Value'
+                        }
 
-    return <DataTable columns={columns} data={data} />
+                        return data.created_at.toDateString()
+                    },
+                },
+                {
+                    headerName: 'Actions',
+                    cellRenderer: ({
+                        data,
+                    }: {
+                        data: NonNullable<RouterOutputs['reports']['get_report']>
+                    }) => {
+                        return (
+                            <Button asChild>
+                                <Link href={`/dashboard/reports/${data.id}`}>View</Link>
+                            </Button>
+                        )
+                    },
+                },
+            ]}
+            rowData={data}
+        />
+    )
 }

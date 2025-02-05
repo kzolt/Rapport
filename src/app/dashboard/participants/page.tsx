@@ -14,7 +14,7 @@ export default async function ParticipantsPage() {
     }
 
     return (
-        <div className="container mx-auto flex w-full flex-col gap-4">
+        <div className="container mx-auto flex flex-1 w-full flex-col gap-4">
             <div className="flex w-full justify-between">
                 <h1 className="text-2xl font-bold">Participants</h1>
                 <Button asChild>

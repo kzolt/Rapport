@@ -1,12 +1,15 @@
-export enum JrActivity {
-    CODE_SPARK = 'code-spark',
-    SCRATCH_JR = 'scratch-jr',
-    PAPER_CIRCUITS = 'paper-circuits',
-    SNAP_CIRCUITS = 'snap-circuits',
-    MOUSE_PRACTICE = 'mouse-practice',
-    TYPING = 'typing',
-    READING = 'reading',
-}
+export const juniorActivities = [
+    'code-spark',
+    'scratch-jr',
+    'paper-circuits',
+    'snap-circuits',
+    'mouse-practice',
+    'typing',
+    'reading',
+    'make-code-arcade',
+    'lego-robotics',
+] as const
+export type JrActivity = (typeof juniorActivities)[number]
 
 export type Rank = 'junior' | 'white'
 
