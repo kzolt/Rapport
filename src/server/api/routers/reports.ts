@@ -47,6 +47,7 @@ export const reportsRouter = createTRPCRouter({
                 location_id: z.string(),
                 activities: z.array(z.string()),
                 notes: z.string(),
+                date: z.date(),
             })
         )
         .mutation(async ({ input, ctx }) => {
@@ -59,7 +60,7 @@ export const reportsRouter = createTRPCRouter({
 
             const new_report = {
                 activities: input.activities as JrActivity[],
-                date: new Date(),
+                date: input.date,
                 notes: input.notes,
             } satisfies ProgressReport
 
