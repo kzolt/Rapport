@@ -25,15 +25,15 @@ export const reportsRouter = createTRPCRouter({
             })
         }),
 
-    get_report: protectedProcedure
+    get_participant_reports: protectedProcedure
         .input(
             z.object({
-                id: z.string(),
+                participant_id: z.string(),
             })
         )
         .query(async ({ ctx, input }) => {
             return await ctx.db.query.progress_report.findFirst({
-                where: eq(progress_report.id, input.id),
+                where: eq(progress_report.participant_id, input.participant_id),
                 with: {
                     participant: true,
                 },

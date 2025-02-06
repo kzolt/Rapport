@@ -5,7 +5,7 @@ import { useEffect } from 'react'
 import { DataTable } from '~/components/data-table'
 import { useLocation } from '~/components/location-context'
 import { Button } from '~/components/ui/button'
-import { api, RouterOutputs } from '~/trpc/react'
+import { api, type RouterOutputs } from '~/trpc/react'
 
 export default function ReportsTable() {
     const { currentLocation } = useLocation()
@@ -33,7 +33,7 @@ export default function ReportsTable() {
                     cellRenderer: ({
                         data,
                     }: {
-                        data: NonNullable<RouterOutputs['reports']['get_report']>
+                        data: NonNullable<RouterOutputs['reports']['get_reports']>[number]
                     }) => {
                         const participant = data.participant
                         return `${participant?.first_name} ${participant?.last_name}`
@@ -45,7 +45,7 @@ export default function ReportsTable() {
                     valueFormatter: ({
                         data,
                     }: {
-                        data: NonNullable<RouterOutputs['reports']['get_report']>
+                        data: NonNullable<RouterOutputs['reports']['get_reports']>[number]
                     }) => {
                         if (!data.created_at) {
                             return 'Invalid Date Value'
@@ -59,11 +59,13 @@ export default function ReportsTable() {
                     cellRenderer: ({
                         data,
                     }: {
-                        data: NonNullable<RouterOutputs['reports']['get_report']>
+                        data: NonNullable<RouterOutputs['reports']['get_reports']>[number]
                     }) => {
                         return (
                             <Button asChild>
-                                <Link href={`/dashboard/reports/${data.id}`}>View</Link>
+                                <Link href={`/dashboard/reports/${data.participant_id}`}>
+                                    View
+                                </Link>
                             </Button>
                         )
                     },
